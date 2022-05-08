@@ -51,6 +51,9 @@
         <h2>Espacio para reiniciar</h2>
       </div>
     </div>
+    <div id="sgame">
+      <h1 id="sgame_name"></h1>
+    </div>
 
     <script src="https://sgame.dit.upm.es/sgame_api/SGAME.js"></script>
 
@@ -62,6 +65,14 @@
 
         function setLife(container, life) {
           container.style.width = life + "%";
+        }
+
+        function setLifeByOpponent(opponent) {
+          if (opponent.getName() === "kano") {
+            setLife($("player2Life"), opponent.getLife());
+          } else {
+            setLife($("player1Life"), opponent.getLife());
+          }
         }
 
         function needQuestion(life, lostLife) {
@@ -97,17 +108,10 @@
             fighters: [{ name: "Subzero" }, { name: "Kano" }],
             callbacks: {
               attack: function (fighter, opponent, life) {
-                if (opponent.getName() === "kano") {
-                  setLife($("player2Life"), opponent.getLife());
-                } else {
-                  setLife($("player1Life"), opponent.getLife());
-                }
-
+                setLifeByOpponent(opponent);
                 if (needQuestion(opponent.getLife(), life)) {
                   console.log(opponent.getName());
-                  SGAME.triggerLO((pass) => {
-                      console.log(pass);
-                  })
+                  triggerSgame(opponent);
                 }
               },
             },
@@ -117,6 +121,20 @@
           function startNewGame() {
             mk.start(options).ready(function () {
               startGame();
+            });
+          }
+
+          function triggerSgame(player) {
+            const sgameDiv = document.getElementById("sgame");
+            const sgameName = document.getElementById("sgame_name");
+            sgameDiv.style.display = "block";
+            sgameName.innerText = player.getName();
+            SGAME.triggerLO(1, (pass) => {
+              if (pass) {
+                player.setLife(player.getLife() + 12);
+                setLifeByOpponent(player);
+              }
+              sgameDiv.style.display = "none";
             });
           }
 
