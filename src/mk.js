@@ -121,6 +121,7 @@
       this._attackCompatible(fighter.getMove().type, opponent.getMove().type)) {
       opponent.endureAttack(damage, fighter.getMove().type);
       if (typeof callback === 'function') {
+        console.log(opponentLife, opponent.getLife())
         callback.call(null, fighter, opponent, opponentLife - opponent.getLife());
       }
     }

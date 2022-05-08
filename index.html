@@ -1,95 +1,161 @@
 <!DOCTYPE html>
 <html>
-<head>
+  <head>
     <title>mk.js</title>
     <script src="src/mk.js"></script>
     <link rel="stylesheet" href="styles/styles.css" />
-</head>
-<body>
-    <div id="parent">
+  </head>
+  <body>
+    <div id="main">
+      <div id="parent">
         <div id="utils">
-            <div id="player1Name" class="playerName">Sub-Zero</div>
-            <div id="player1LifeBar" class="lifebar"><div class="life" id="player1Life"></div></div>
-            <div id="player2Name" class="playerName">Kano</div>
-            <div id="player2LifeBar" class="lifebar"><div class="life" id="player2Life"></div></div>
+          <div id="player1Name" class="playerName">Sub-Zero</div>
+          <div id="player1LifeBar" class="lifebar">
+            <div class="life" id="player1Life"></div>
+          </div>
+          <div id="player2Name" class="playerName">Kano</div>
+          <div id="player2LifeBar" class="lifebar">
+            <div class="life" id="player2Life"></div>
+          </div>
         </div>
-        <div id="arena">
-        </div>
+        <div id="arena"></div>
         <div id="loading">
-            <span class="loadingLabel">Loading...</span>
+          <span class="loadingLabel">Loading...</span>
         </div>
+      </div>
+      <div>
+        <h1>Controles</h1>
+        <div id="instrucciones">
+          <div class="controles">
+            <h3>Sub-Zero</h3>
+            <ul>
+              <li>W ↑ , A ⟵, S ↓, D ⟶</li>
+              <li>T - Puñetazo alto</li>
+              <li>Y - Patada alta</li>
+              <li>U - Puñetazo bajo</li>
+              <li>I - Patada baja</li>
+            </ul>
+          </div>
+          <div class="controles">
+            <h3>Kano</h3>
+            <ul>
+              <li>Usa las flechas para moverte</li>
+              <li>1 - Puñetazo alto</li>
+              <li>2 - Patada alta</li>
+              <li>3 - Puñetazo bajo</li>
+              <li>5 - Patada baja</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>Espacio para reiniciar</h2>
+      </div>
     </div>
-    <p>
-        <ul class="instructions-list">
-            <li>For playing with gesture recognition you need Google Chrome 22+ or Firefox 19+.</li>
-            <li>Choose proper place to position your computer. I recommend you to use white wall as background and dark clothes for best contrast.</li>
-            <li>Stay outside the scope of the webcam. It needs to capture the background behind you at first place.</li>
-            <li>Allow to the web page to use your webcam.</li>
-            <li>If the webcam canvas is black then you can start playing otherwise restart and try again.</li>
-            <li>Stay in about 2.5 meters away from your computer in the middle of the view zone.</li>
-            <li>For walking left stay in the left side of the webcam view region and right if you want to walk right. If you want to stop just go back in the middle.</li>
-            <li>Raise your left or right arm to punch.</li>
-            <li>Raise your left or right leg to kick.</li>
-            <li>Squat and your fighter will squat too.</li>
-            <li>Squat and punch for squat low punch attack.</li>
-            <li>Enjoy!</li>
-        </ul>
-    </p>
+
+    <script src="https://sgame.dit.upm.es/sgame_api/SGAME.js"></script>
+
     <script>
+      (function () {
+        function $(id) {
+          return document.getElementById(id);
+        }
+
+        function setLife(container, life) {
+          container.style.width = life + "%";
+        }
+
+        function needQuestion(life, lostLife) {
+          return (
+            between(life, life + lostLife, 75) ||
+            between(life, life + lostLife, 50) ||
+            between(life, life + lostLife, 25)
+          );
+        }
+
+        function between(min, max, num) {
+          return min <= num && max > num;
+        }
+
+        document.onkeydown = function (e) {
+          if (e.keyCode === 32) {
+            window.location.reload();
+          }
+        };
+
         (function () {
+          var startGame = function () {
+            $("loading").style.visibility = "hidden";
+            $("arena").style.visibility = "visible";
+            $("utils").style.visibility = "visible";
+          };
 
-            function $(id) {
-                return document.getElementById(id);
-            }
-
-            function setLife(container, life) {
-                container.style.width = life + '%';
-            }
-
-            document.onkeydown = function (e) {
-                if (e.keyCode === 32) {
-                    window.location.reload();
+          var options = {
+            arena: {
+              container: document.getElementById("arena"),
+              arena: mk.arenas.types.TOWER,
+            },
+            fighters: [{ name: "Subzero" }, { name: "Kano" }],
+            callbacks: {
+              attack: function (fighter, opponent, life) {
+                if (opponent.getName() === "kano") {
+                  setLife($("player2Life"), opponent.getLife());
+                } else {
+                  setLife($("player1Life"), opponent.getLife());
                 }
-            };
 
-            (function () {
-                
-                var startGame = function () {
-                    $('loading').style.visibility = 'hidden';
-                    $('arena').style.visibility = 'visible';
-                    $('utils').style.visibility = 'visible';
-                };
-                
-                var options = {
-                    arena: {
-                        container: document.getElementById('arena'),
-                        arena: mk.arenas.types.TOWER
-                    },
-                    fighters: [{ name: 'Subzero' }, { name: 'Kano' }],
-                    callbacks: {
-                        attack: function (f, o, l) {
-                            if (o.getName() === 'kano') {
-                                setLife($('player2Life'), o.getLife());
-                            } else {
-                                setLife($('player1Life'), o.getLife());
-                            }
-                        }
-
-                    },
-                    gameType: 'multiplayer'
-                };
-
-                function startNewGame() {
-                    mk.start(options).ready(function () {
-                        startGame();
-                    });
+                if (needQuestion(opponent.getLife(), life)) {
+                  console.log(opponent.getName());
+                  SGAME.triggerLO((pass) => {
+                      console.log(pass);
+                  })
                 }
-                
-                startNewGame();
-                
-            }());
+              },
+            },
+            gameType: "multiplayer",
+          };
 
-        }());
+          function startNewGame() {
+            mk.start(options).ready(function () {
+              startGame();
+            });
+          }
+
+          startNewGame();
+        })();
+      })();
     </script>
-</body>
+
+    <script>
+      var settings = {};
+
+      settings.assets_path = "sgame_assets/";
+
+      settings.events = {};
+      settings.events["1"] = {
+        id: "1",
+        type: "damage",
+      };
+      //Add more events
+      // settings.events["eId"] = {
+      //    "id": "eId",
+      //    "type": "damage"
+      // };
+
+      settings.los = {};
+      settings.los["1001"] = {
+        id: "1001",
+        url: "SCORM2004Package_Test/presentation.html",
+        scorm_type: "sco",
+        scorm_version: "2004",
+        report_data: true,
+      };
+
+      settings.event_mapping = {};
+      settings.event_mapping["1"] = ["1001"];
+      //Add more mappings
+      //settings.event_mapping["eId"] = ["loId"];
+
+      SGAME.loadSettings(settings);
+    </script>
+  </body>
 </html>

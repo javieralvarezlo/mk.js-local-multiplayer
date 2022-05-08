@@ -1,0 +1,7 @@
+[{
+    "id": "1",
+    "title": "get_damage",
+    "type": "damage",
+    "description": "Event triggered on getting damage",
+    "event_frequency": "skill-dependent_high"
+}]
