@@ -57,7 +57,7 @@
       <h1 id="sgame_name"></h1>
     </div>
 
-    <script src="https://sgame.dit.upm.es/sgame_api/SGAME.js"></script>
+    <script src="/SGAME.js"></script>
 
     <script>
       (function () {
@@ -126,11 +126,12 @@
             });
           }
 
-          function triggerSgame(player) {
+          async function triggerSgame(player) {
             const sgameDiv = document.getElementById("sgame");
             const sgameName = document.getElementById("sgame_name");
             sgameDiv.style.display = "block";
-            sgameName.innerText = player.getName();
+            sgameName.innerText = `Responde ${player.getName()}`;
+            await setTimeout(() => {}, 2000);
             SGAME.triggerLO(1, (pass) => {
               if (pass) {
                 player.setLife(player.getLife() + 12);
@@ -143,32 +144,6 @@
           startNewGame();
         })();
       })();
-    </script>
-
-    <script>
-      var settings = {};
-
-      settings.assets_path = "sgame_assets/";
-
-      settings.events = {};
-      settings.events["1"] = {
-        id: "1",
-        type: "damage",
-      };
-
-      settings.los = {};
-      settings.los["1001"] = {
-        id: "1001",
-        url: "SCORM2004Package_Test/presentation.html",
-        scorm_type: "sco",
-        scorm_version: "2004",
-        report_data: true,
-      };
-
-      settings.event_mapping = {};
-      settings.event_mapping["1"] = ["1001"];
-
-      SGAME.loadSettings(settings);
     </script>
   </body>
 </html>
