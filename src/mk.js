@@ -371,15 +371,15 @@
   };
 
   mk.controllers.keys.p1 = {
-    RIGHT: 74,
-    LEFT : 71,
-    UP   : 89,
-    DOWN : 72,
+    RIGHT: 68,
+    LEFT : 65,
+    UP   : 87,
+    DOWN : 83,
     BLOCK: 16,
-    HP   : 65,
-    LP   : 83,
-    LK   : 68,
-    HK   : 70
+    HP   : 84,
+    LP   : 85,
+    LK   : 73,
+    HK   : 89
   };
 
   mk.controllers.keys.p2 = {
@@ -387,11 +387,11 @@
     LEFT : 37,
     UP   : 38,
     DOWN : 40,
-    BLOCK: 17,
-    HP   : 80,
-    LP   : 219,
-    LK   : 221,
-    HK   : 220
+    BLOCK: 96,
+    HP   : 97,
+    LP   : 99,
+    LK   : 101,
+    HK   : 98
   };
 
   mk.controllers.Multiplayer = function (options) {

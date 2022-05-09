@@ -34,6 +34,7 @@
               <li>Y - Patada alta</li>
               <li>U - Puñetazo bajo</li>
               <li>I - Patada baja</li>
+              <li>Shift - Bloquear</li>
             </ul>
           </div>
           <div class="controles">
@@ -44,6 +45,7 @@
               <li>2 - Patada alta</li>
               <li>3 - Puñetazo bajo</li>
               <li>5 - Patada baja</li>
+              <li>0 - Bloquear</li>
             </ul>
           </div>
         </div>
@@ -153,11 +155,6 @@
         id: "1",
         type: "damage",
       };
-      //Add more events
-      // settings.events["eId"] = {
-      //    "id": "eId",
-      //    "type": "damage"
-      // };
 
       settings.los = {};
       settings.los["1001"] = {
@@ -170,8 +167,6 @@
 
       settings.event_mapping = {};
       settings.event_mapping["1"] = ["1001"];
-      //Add more mappings
-      //settings.event_mapping["eId"] = ["loId"];
 
       SGAME.loadSettings(settings);
     </script>
