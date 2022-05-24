@@ -126,12 +126,11 @@
             });
           }
 
-          async function triggerSgame(player) {
+          function triggerSgame(player) {
             const sgameDiv = document.getElementById("sgame");
             const sgameName = document.getElementById("sgame_name");
             sgameDiv.style.display = "block";
             sgameName.innerText = `Responde ${player.getName()}`;
-            await setTimeout(() => {}, 2000);
             SGAME.triggerLO(1, (pass) => {
               if (pass) {
                 player.setLife(player.getLife() + 12);

@@ -139,4 +139,5 @@ body, html {
     display: block;
     color: black;
     background-color: white;
+    margin-top: 0;
 }
